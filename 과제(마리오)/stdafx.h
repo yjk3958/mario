@@ -23,6 +23,7 @@
 #include "iniDataManager.h"
 #include "sceneManager.h"
 #include "keyAniManager.h"
+#include "cameraManager.h"
 #include "utils.h"
 #include "collision.h"
 #include "txtData.h"
@@ -36,10 +37,14 @@ using namespace HEPTA_UTIL;
 //=======================================================
 
 #define WINNAME		(LPTSTR)TEXT("Hepta Window API")
-#define WINSTARTX	2000	//윈도우 시작좌표 X
+#define WINSTARTX	50		//윈도우 시작좌표 X
 #define WINSTARTY	50		//윈도우 시작좌표 Y
-#define WINSIZEX	1024		//윈도우 가로크기
+#define WINSIZEX	1024	//윈도우 가로크기
 #define WINSIZEY	768		//윈도우 세로크기
+#define CAMERASTARTX 0		//카메라 시작점X
+#define CAMERASTARTY 0		//카메라 시작점Y
+#define CAMERAX		WINSIZEX
+#define CAMERAY		WINSIZEY
 #define WINSTYLE	WS_CAPTION | WS_SYSMENU
 
 #define KEYMANAGER		keyManager::getSingleton()
@@ -48,6 +53,7 @@ using namespace HEPTA_UTIL;
 #define SOUNDMANAGER	soundManager::getSingleton()
 #define TIMEMANAGER		timeManager::getSingleton()
 #define EFFECTMANAGER	effectManager::getSingleton()
+#define CAMERAMANAGER	cameraManager::getSingleton()
 #define SCENEMANAGER	sceneManager::getSingleton()
 #define KEYANIMANAGER	keyAniManager::getSingleton()
 #define TXTDATA			txtData::getSingleton()

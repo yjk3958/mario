@@ -64,6 +64,8 @@ void gameNode::release(void)
 		KEYANIMANAGER->releaseSingleton();
 		DATABASE->release();
 		DATABASE->releaseSingleton();
+		CAMERAMANAGER->release();
+		CAMERAMANAGER->releaseSingleton();
 	}
 
 	ReleaseDC(_hWnd, _hdc);
