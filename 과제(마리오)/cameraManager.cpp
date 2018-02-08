@@ -12,7 +12,7 @@ cameraManager::~cameraManager()
 {
 
 }
-HRESULT cameraManager::init(int groundTotalWidth, int groundTotalHeight, int cameraWidth, int cameraHeight, float x = 0, float y = 0, float magnification = 1)
+HRESULT cameraManager::init(int groundTotalWidth, int groundTotalHeight, int cameraWidth, int cameraHeight, float x, float y, float magnification)
 {
 	if (_cameraInfo != NULL) release();
 	HDC hdc = GetDC(_hWnd);
