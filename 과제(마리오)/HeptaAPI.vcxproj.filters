@@ -31,9 +31,6 @@
     <Filter Include="2DGameFramework\image">
       <UniqueIdentifier>{efeeb4a5-f3de-4942-a317-21258d10129e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="playGround\bullets">
-      <UniqueIdentifier>{c0baca9e-5efa-4ae8-a7df-08910ac1b783}</UniqueIdentifier>
-    </Filter>
     <Filter Include="2DGameFramework\progressBar">
       <UniqueIdentifier>{f316504a-bdda-4a8d-b01b-87142c0dfff6}</UniqueIdentifier>
     </Filter>
@@ -58,17 +55,11 @@
     <Filter Include="2DGameFramework\action">
       <UniqueIdentifier>{b3e765fe-3f62-4682-9f1a-6ee96401a17c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="playGround\tankScene">
-      <UniqueIdentifier>{488fc336-5f2f-4352-a338-30cb712cf6df}</UniqueIdentifier>
-    </Filter>
     <Filter Include="playGround\A%2aScene">
       <UniqueIdentifier>{592fd72d-6c4b-4a6f-8b8c-e87a13e07a44}</UniqueIdentifier>
     </Filter>
     <Filter Include="2DGameFramework\loading">
       <UniqueIdentifier>{74449c60-db19-4868-b90c-d0f54861ab46}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="playGround\loadingTest">
-      <UniqueIdentifier>{086d7d42-5749-4b9a-95a5-47cb332d63cb}</UniqueIdentifier>
     </Filter>
     <Filter Include="playGround\IsoMetricScene">
       <UniqueIdentifier>{f6bd9ec4-4e44-49bd-a7ea-c46a00b6e4b3}</UniqueIdentifier>
@@ -123,9 +114,6 @@
     <ClInclude Include="imageManager.h">
       <Filter>2DGameFramework\Manager</Filter>
     </ClInclude>
-    <ClInclude Include="bullets.h">
-      <Filter>playGround\bullets</Filter>
-    </ClInclude>
     <ClInclude Include="progressBar.h">
       <Filter>2DGameFramework\progressBar</Filter>
     </ClInclude>
@@ -168,18 +156,6 @@
     <ClInclude Include="keyAniManager.h">
       <Filter>2DGameFramework\Manager</Filter>
     </ClInclude>
-    <ClInclude Include="tankScene.h">
-      <Filter>playGround\tankScene</Filter>
-    </ClInclude>
-    <ClInclude Include="tileNode.h">
-      <Filter>playGround\tankScene</Filter>
-    </ClInclude>
-    <ClInclude Include="tankMap.h">
-      <Filter>playGround\tankScene</Filter>
-    </ClInclude>
-    <ClInclude Include="tank.h">
-      <Filter>playGround\tankScene</Filter>
-    </ClInclude>
     <ClInclude Include="tile.h">
       <Filter>playGround\A%2aScene</Filter>
     </ClInclude>
@@ -191,12 +167,6 @@
     </ClInclude>
     <ClInclude Include="loading.h">
       <Filter>2DGameFramework\loading</Filter>
-    </ClInclude>
-    <ClInclude Include="loadingScene.h">
-      <Filter>playGround\loadingTest</Filter>
-    </ClInclude>
-    <ClInclude Include="playScene.h">
-      <Filter>playGround\loadingTest</Filter>
     </ClInclude>
     <ClInclude Include="isoMetricScene.h">
       <Filter>playGround\IsoMetricScene</Filter>
@@ -238,9 +208,6 @@
     </ClCompile>
     <ClCompile Include="imageManager.cpp">
       <Filter>2DGameFramework\Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="bullets.cpp">
-      <Filter>playGround\bullets</Filter>
     </ClCompile>
     <ClCompile Include="progressBar.cpp">
       <Filter>2DGameFramework\progressBar</Filter>
@@ -284,15 +251,6 @@
     <ClCompile Include="keyAniManager.cpp">
       <Filter>2DGameFramework\Manager</Filter>
     </ClCompile>
-    <ClCompile Include="tankScene.cpp">
-      <Filter>playGround\tankScene</Filter>
-    </ClCompile>
-    <ClCompile Include="tank.cpp">
-      <Filter>playGround\tankScene</Filter>
-    </ClCompile>
-    <ClCompile Include="tankMap.cpp">
-      <Filter>playGround\tankScene</Filter>
-    </ClCompile>
     <ClCompile Include="tile.cpp">
       <Filter>playGround\A%2aScene</Filter>
     </ClCompile>
@@ -304,12 +262,6 @@
     </ClCompile>
     <ClCompile Include="loading.cpp">
       <Filter>2DGameFramework\loading</Filter>
-    </ClCompile>
-    <ClCompile Include="loadingScene.cpp">
-      <Filter>playGround\loadingTest</Filter>
-    </ClCompile>
-    <ClCompile Include="playScene.cpp">
-      <Filter>playGround\loadingTest</Filter>
     </ClCompile>
     <ClCompile Include="isoMetricScene.cpp">
       <Filter>playGround\IsoMetricScene</Filter>

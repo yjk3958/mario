@@ -1,6 +1,5 @@
 #pragma once
 #include "gameNode.h"
-#include "loadingScene.h"
 #include "playScene.h"
 #include "isoMetricScene.h"
 

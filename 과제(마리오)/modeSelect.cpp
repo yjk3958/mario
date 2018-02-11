@@ -14,6 +14,7 @@ modeSelect::~modeSelect()
 
 HRESULT modeSelect::init(void)
 {
+	gameNode::init(true);
 
 	return S_OK;
 }

@@ -19,7 +19,6 @@ HRESULT playGround::init()
 	IMAGEMANAGER->addImage("¿À¹öÄîÇÃ·¹ÀÌ", "¿À¹öÄîÇÃ·¹ÀÌ.bmp", WINSIZEX, WINSIZEY, true, RGB(255, 0, 255));
 
 	SCENEMANAGER->addScene("·Îµù¾À", new isoMetricScene);
-	SCENEMANAGER->addScene("ÇÃ·¹ÀÌ¾À", new playScene);
 
 	SCENEMANAGER->changeScene("·Îµù¾À");
 

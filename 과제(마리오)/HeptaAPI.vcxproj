@@ -82,7 +82,6 @@
     <ClInclude Include="animation.h" />
     <ClInclude Include="aStarScene.h" />
     <ClInclude Include="aStarTest.h" />
-    <ClInclude Include="bullets.h" />
     <ClInclude Include="button.h" />
     <ClInclude Include="cameraManager.h" />
     <ClInclude Include="collision.h" />
@@ -98,11 +97,9 @@
     <ClInclude Include="keyAniManager.h" />
     <ClInclude Include="keyManager.h" />
     <ClInclude Include="loading.h" />
-    <ClInclude Include="loadingScene.h" />
     <ClInclude Include="mapTool.h" />
     <ClInclude Include="modeSelect.h" />
     <ClInclude Include="playGround.h" />
-    <ClInclude Include="playScene.h" />
     <ClInclude Include="progressBar.h" />
     <ClInclude Include="randomFunction.h" />
     <ClInclude Include="Resource.h" />
@@ -110,12 +107,8 @@
     <ClInclude Include="singletonBase.h" />
     <ClInclude Include="soundManager.h" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="tank.h" />
-    <ClInclude Include="tankMap.h" />
-    <ClInclude Include="tankScene.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="tile.h" />
-    <ClInclude Include="tileNode.h" />
     <ClInclude Include="timeManager.h" />
     <ClInclude Include="timer.h" />
     <ClInclude Include="txtData.h" />
@@ -126,7 +119,6 @@
     <ClCompile Include="animation.cpp" />
     <ClCompile Include="aStarScene.cpp" />
     <ClCompile Include="aStarTest.cpp" />
-    <ClCompile Include="bullets.cpp" />
     <ClCompile Include="button.cpp" />
     <ClCompile Include="cameraManager.cpp" />
     <ClCompile Include="collision.cpp" />
@@ -141,11 +133,9 @@
     <ClCompile Include="keyAniManager.cpp" />
     <ClCompile Include="keyManager.cpp" />
     <ClCompile Include="loading.cpp" />
-    <ClCompile Include="loadingScene.cpp" />
     <ClCompile Include="mapTool.cpp" />
     <ClCompile Include="modeSelect.cpp" />
     <ClCompile Include="playGround.cpp" />
-    <ClCompile Include="playScene.cpp" />
     <ClCompile Include="progressBar.cpp" />
     <ClCompile Include="sceneManager.cpp" />
     <ClCompile Include="soundManager.cpp" />
@@ -153,9 +143,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="tank.cpp" />
-    <ClCompile Include="tankMap.cpp" />
-    <ClCompile Include="tankScene.cpp" />
     <ClCompile Include="tile.cpp" />
     <ClCompile Include="timeManager.cpp" />
     <ClCompile Include="timer.cpp" />

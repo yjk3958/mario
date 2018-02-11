@@ -15,6 +15,8 @@ mapTool::~mapTool()
 
 HRESULT mapTool::init(void)		
 {
+	gameNode::init(true);
+
 	IMAGEMANAGER->addFrameImage("backGround", "./image/Mario-backGround+ground.bmp", 80, 64, 5, 4, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("cloud", "./image/Mario-cloud+grass.bmp", 128, 112, 8, 7, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("endPlate", "./image/Mario-endPlate.bmp", 32, 32, 2, 2, true, RGB(255, 0, 255));
