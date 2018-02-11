@@ -99,6 +99,8 @@
     <ClInclude Include="keyManager.h" />
     <ClInclude Include="loading.h" />
     <ClInclude Include="loadingScene.h" />
+    <ClInclude Include="mapTool.h" />
+    <ClInclude Include="modeSelect.h" />
     <ClInclude Include="playGround.h" />
     <ClInclude Include="playScene.h" />
     <ClInclude Include="progressBar.h" />
@@ -140,6 +142,8 @@
     <ClCompile Include="keyManager.cpp" />
     <ClCompile Include="loading.cpp" />
     <ClCompile Include="loadingScene.cpp" />
+    <ClCompile Include="mapTool.cpp" />
+    <ClCompile Include="modeSelect.cpp" />
     <ClCompile Include="playGround.cpp" />
     <ClCompile Include="playScene.cpp" />
     <ClCompile Include="progressBar.cpp" />

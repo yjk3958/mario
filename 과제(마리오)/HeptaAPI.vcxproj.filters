@@ -73,6 +73,12 @@
     <Filter Include="playGround\IsoMetricScene">
       <UniqueIdentifier>{f6bd9ec4-4e44-49bd-a7ea-c46a00b6e4b3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="mapTool">
+      <UniqueIdentifier>{ce0150c0-b710-4386-8abb-0fb5b30c8bf8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="modeSelect">
+      <UniqueIdentifier>{5c2e63f3-d8f0-4593-82af-0e0c6baf23ce}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -198,6 +204,12 @@
     <ClInclude Include="cameraManager.h">
       <Filter>2DGameFramework\Manager</Filter>
     </ClInclude>
+    <ClInclude Include="mapTool.h">
+      <Filter>mapTool</Filter>
+    </ClInclude>
+    <ClInclude Include="modeSelect.h">
+      <Filter>modeSelect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -304,6 +316,12 @@
     </ClCompile>
     <ClCompile Include="cameraManager.cpp">
       <Filter>2DGameFramework\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="mapTool.cpp">
+      <Filter>mapTool</Filter>
+    </ClCompile>
+    <ClCompile Include="modeSelect.cpp">
+      <Filter>modeSelect</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

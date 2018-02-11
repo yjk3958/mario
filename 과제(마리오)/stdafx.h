@@ -41,8 +41,6 @@ using namespace HEPTA_UTIL;
 #define WINSTARTY	50		//윈도우 시작좌표 Y
 #define WINSIZEX	1024	//윈도우 가로크기
 #define WINSIZEY	768		//윈도우 세로크기
-#define CAMERASTARTX 0		//카메라 시작점X
-#define CAMERASTARTY 0		//카메라 시작점Y
 #define CAMERAX		WINSIZEX
 #define CAMERAY		WINSIZEY
 #define WINSTYLE	WS_CAPTION | WS_SYSMENU
@@ -76,3 +74,16 @@ extern HINSTANCE	_hInstance;		//인스턴스 핸들
 extern HWND			_hWnd;			//핸들
 extern POINT		_ptMouse;
 extern BOOL			_leftButtonDown;
+
+//=======================================================
+//## 마리오 연습중 ## 2018.02.10 ##
+//=======================================================
+#define CAMERASTARTX 0		//카메라 시작점X
+#define CAMERASTARTY 0		//카메라 시작점Y
+
+enum MODE
+{
+	MODE_SELECT,
+	MODE_MAPTOOL,
+	MODE_PLAYGROUND
+};

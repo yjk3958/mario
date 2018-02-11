@@ -80,6 +80,21 @@ void gameNode::render(void)
 {
 
 }
+//맵 셋팅 함수
+void gameNode::setMap(void)
+{
+
+}
+
+//저장, 로드
+void gameNode::save(void)
+{
+
+}
+void gameNode::load(void)
+{
+
+}
 
 
 LRESULT gameNode::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
@@ -102,15 +117,40 @@ LRESULT gameNode::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lPara
 		case WM_TIMER:
 			this->update();
 		break;
-		
+		case WM_LBUTTONDOWN:
+			_leftButtonDown = true;
+			this->setMap();
+			break;
+		case WM_LBUTTONUP:
+			_leftButtonDown = false;
+			break;
 		case WM_MOUSEMOVE:
 		{
 			_ptMouse.x = static_cast<float>LOWORD(lParam);
 			_ptMouse.y = static_cast<float>HIWORD(lParam);
 
+			if (_leftButtonDown) this->setMap();
 		}
 		break;
-	
+		case WM_COMMAND:
+			switch (LOWORD(wParam))
+			{
+			case CTRL_SAVE:
+				this->save();
+				break;
+
+			case CTRL_LOAD:
+				this->load();
+				InvalidateRect(hWnd, NULL, false);
+				break;
+
+			default:
+				this->setCtrlSelect(LOWORD(wParam));
+				break;
+			}
+			break;
+
+
 		case WM_KEYDOWN:
 			switch (wParam)
 			{
