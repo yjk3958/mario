@@ -5,19 +5,15 @@
 #define TILESIZE 16
 
 //================== 나중에 수정할부분
-#define TILEX 20
-#define TILEY 20
-//===================
-#define TILESIZEX TILESIZE * TILEX
-#define TILESIZEY TILESIZE * TILEY
-//===================여기도
-#define SAMPLETILEX 20
-#define SAMPLETILEY 9
+#define TILEBASEX 20
+#define TILEBASEY 20
 
 
 enum TERRAIN
 {
-	TR_INAIR,TR_ONLAND
+	TR_INAIR,
+	TR_ONLAND,
+	TR_NONE
 };
 enum OBJECT
 {
@@ -60,6 +56,10 @@ struct  tagCurrentTile
 class mapTool : public gameNode
 {
 private : 
+	vector<tagTile> _vTile;
+	vector<tagTile>::iterator _viTile;
+
+private : 
 	HWND _btnSave;
 	HWND _btnLoad;
 	HWND _btnTerrainDraw;
@@ -68,15 +68,23 @@ private :
 	HWND _btnEraser;
 	HWND _btnDrag;
 
-
 	tagCurrentTile	_currentTile;
-	tagSampleTile	_sampleTile[SAMPLETILEX * SAMPLETILEY];
-	tagTile			_tiles[TILEX * TILEY];
-
+	tagSampleTile	_sampleTile[66];	
 
 	image* _image;
 	int _pos[2];
+	bool _checkBox;
+	CTRL _currentCtrl;
+
+
+	POINT _basePoint;
+	POINT _endPoint;
+
+
 public:
+	mapTool();
+	~mapTool();
+
 	virtual HRESULT init(void);		//초기화 함수
 	virtual void release(void);		//메모리 관련 해제
 	virtual void update(void);		//업데이트(연산)
@@ -85,16 +93,21 @@ public:
 									//맵 셋팅 관련 함수
 	virtual void setup();
 	virtual void setMap();
+	virtual void setSampleTile();
+
 
 	//저장, 불러오기
 	virtual void save();
 	virtual void load();
 
+
 	//TERRAIN terrainSelect(int frameX, int frameY);
 	//OBJECT objSelect(int frameX, int frameY);
 	//ITEM itemSelect(int frameX, int frameY);
 	LRESULT MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam);
-	mapTool();
-	~mapTool();
+	
+	vector<tagTile> getVTile() { return _vTile; }
+	void setVTileObj(int i, OBJECT obj) { _vTile[i].obj = obj; }
+	void setVTileItem(int i, ITEM item) { _vTile[i].item = item; }
 };
 

@@ -17,7 +17,7 @@ LPTSTR _lpszClass = TEXT("Hepta Window API");
 
 BOOL _leftButtonDown;
 
-MODE _md = MODE_SELECT;
+MODE _md; //선택창 , 맵툴, 플레이그라운드를 정하는 변수
 //정적 바인딩
 playGround _pg;
 mapTool _mt;
@@ -33,7 +33,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmd
 	MSG			message;		//메시지 구조체
 	WNDCLASS	wndClass;		//윈도우 정보 구조체
 
-
+	_md = MODE_MAPTOOL;
 	_hInstance = hInstance;
 
 	//윈도우 정보를 먼저 셋팅한다
@@ -66,6 +66,37 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmd
 		hInstance,
 		NULL);
 
+	if (_md == MODE_SELECT)
+	{
+		//클라이언트 영역 재조정
+		setWindowSize(WINSTARTX, WINSTARTY, MODESELECTX, MODESELECTY);
+		//실제로 윈도우 창을 화면에 투영시켜준다(보여준다)
+		ShowWindow(_hWnd, cmdShow);
+		//타이머는 메시지 처리 위에 선언
+		if (FAILED(_ms.init()))	return 0;
+		while (GetMessage(&message, 0, 0, 0))
+		{
+			TranslateMessage(&message);		//키보드 입력 시 그 메시지 처리 담당
+			DispatchMessage(&message);		//실제로 윈도우에 메시지를 전달해주는 역할
+		}
+	}
+
+	if (_md == MODE_MAPTOOL)
+	{
+		//클라이언트 영역 재조정
+		setWindowSize(WINSTARTX, WINSTARTY, WINSIZEX, WINSIZEY);
+		//실제로 윈도우 창을 화면에 투영시켜준다(보여준다)
+		ShowWindow(_hWnd, cmdShow);
+		//타이머는 메시지 처리 위에 선언
+		if (FAILED(_mt.init()))	return 0;
+
+		//대기하고 있다가 입력이 들어오면 처리
+		while (GetMessage(&message, 0, 0, 0))
+		{
+			TranslateMessage(&message);		//키보드 입력 시 그 메시지 처리 담당
+			DispatchMessage(&message);		//실제로 윈도우에 메시지를 전달해주는 역할
+		}
+	}
 
 	if (_md == MODE_PLAYGROUND)
 	{
@@ -75,6 +106,8 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmd
 		ShowWindow(_hWnd, cmdShow);
 		//타이머는 메시지 처리 위에 선언
 		if (FAILED(_pg.init()))	return 0;
+		
+		//계속 돌아가고 있는중
 		while (true)
 		{
 			if (PeekMessage(&message, NULL, 0, 0, PM_REMOVE))
@@ -91,39 +124,12 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmd
 				_pg.render();
 			}
 		}
-		_pg.release();
-	}
-	if (_md == MODE_MAPTOOL)
-	{
-		//클라이언트 영역 재조정
-		setWindowSize(WINSTARTX, WINSTARTY, WINSIZEX, WINSIZEY);
-		//실제로 윈도우 창을 화면에 투영시켜준다(보여준다)
-		ShowWindow(_hWnd, cmdShow);
-		//타이머는 메시지 처리 위에 선언
-		if (FAILED(_mt.init()))	return 0;
-		while (GetMessage(&message, 0, 0, 0))
-		{
-			TranslateMessage(&message);		//키보드 입력 시 그 메시지 처리 담당
-			DispatchMessage(&message);		//실제로 윈도우에 메시지를 전달해주는 역할
-		}
-		_mt.release();
-	}
-	if (_md == MODE_SELECT)
-	{
-		//클라이언트 영역 재조정
-		setWindowSize(WINSTARTX, WINSTARTY, WINSIZEX, WINSIZEY);
-		//실제로 윈도우 창을 화면에 투영시켜준다(보여준다)
-		ShowWindow(_hWnd, cmdShow);
-		//타이머는 메시지 처리 위에 선언
-		if (FAILED(_ms.init()))	return 0;
-		while (GetMessage(&message, 0, 0, 0))
-		{
-			TranslateMessage(&message);		//키보드 입력 시 그 메시지 처리 담당
-			DispatchMessage(&message);		//실제로 윈도우에 메시지를 전달해주는 역할
-		}
-		_ms.release();
 	}
 
+
+	_pg.release();
+	_ms.release();
+	_mt.release();
 	return message.wParam;
 }
 
@@ -133,13 +139,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 	{
 	case MODE_SELECT:
 		return _ms.MainProc(hWnd, iMessage, wParam, lParam);
-		break;
 	case MODE_MAPTOOL:
 		return _mt.MainProc(hWnd, iMessage, wParam, lParam);
-		break;
 	case MODE_PLAYGROUND:
 		return _pg.MainProc(hWnd, iMessage, wParam, lParam);
-		break;
 	}
 }
 
@@ -159,3 +162,4 @@ void setWindowSize(int x, int y, int width, int height)
 	SetWindowPos(_hWnd, NULL, x, y, (winRect.right - winRect.left),
 		(winRect.bottom - winRect.top), SWP_NOZORDER | SWP_NOMOVE);
 }
+

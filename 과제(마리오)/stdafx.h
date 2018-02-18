@@ -39,10 +39,8 @@ using namespace HEPTA_UTIL;
 #define WINNAME		(LPTSTR)TEXT("Hepta Window API")
 #define WINSTARTX	50		//윈도우 시작좌표 X
 #define WINSTARTY	50		//윈도우 시작좌표 Y
-#define WINSIZEX	1024	//윈도우 가로크기
-#define WINSIZEY	768		//윈도우 세로크기
-#define CAMERAX		WINSIZEX
-#define CAMERAY		WINSIZEY
+#define WINSIZEX	1250	//윈도우 가로크기
+#define WINSIZEY	800		//윈도우 세로크기
 #define WINSTYLE	WS_CAPTION | WS_SYSMENU
 
 #define KEYMANAGER		keyManager::getSingleton()
@@ -78,8 +76,19 @@ extern BOOL			_leftButtonDown;
 //=======================================================
 //## 마리오 연습중 ## 2018.02.10 ##
 //=======================================================
-#define CAMERASTARTX 0		//카메라 시작점X
-#define CAMERASTARTY 0		//카메라 시작점Y
+#define MODESELECTX 400
+#define MODESELECTY 300
+
+#define CAMERAX		800
+#define CAMERAY		600
+#define CAMERASTARTX 50		//카메라 시작점X
+#define CAMERASTARTY 70		//카메라 시작점Y
+
+#define SAMPLETILEBOXX 300
+#define SAMPLETILEBOXY 400
+#define SAMPLETILESTARTX 900
+#define SAMPLETILESTARTY 70
+
 
 enum MODE
 {
@@ -87,3 +96,12 @@ enum MODE
 	MODE_MAPTOOL,
 	MODE_PLAYGROUND
 };
+
+enum SELECT
+{
+	SELECT_MAPTOOL,
+	SELECT_PLAY,
+	SELECT_NONE
+};
+
+extern MODE _md;

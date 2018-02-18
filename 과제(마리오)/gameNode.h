@@ -9,6 +9,7 @@ enum CTRL
 	CTRL_TERRAINDRAW,	//지형		버튼 메시지 terrain == 지형
 	CTRL_OBJDRAW,		//오브젝트	버튼 메시지
 	CTRL_ERASER,		//지우개		버튼 메시지
+	CTRL_BOXMAKE,		//드래그박스
 	CTRL_END
 };
 
