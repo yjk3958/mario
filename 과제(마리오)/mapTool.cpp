@@ -26,8 +26,13 @@ HRESULT mapTool::init(void)
 	CAMERAMANAGER->init(TILESIZE*TILEBASEX, TILESIZE*TILEBASEY, CAMERAX, CAMERAY, 0.0f, 0.0f, 4.0);
 
 	_image = IMAGEMANAGER->findImage("backGround");
-	
+	setSampleTile();
 	_checkBox = false;
+
+	_ctrlCameraRect[CTRL_UP] = RectMakeCenter(CAMERASTARTX+CAMERAX / 2, CAMERASTARTY - 25, 100, 40);
+	_ctrlCameraRect[CTRL_DOWN] = RectMakeCenter(CAMERASTARTX+CAMERAX / 2, CAMERASTARTY + CAMERAY + 25, 100, 40);
+	_ctrlCameraRect[CTRL_LEFT] = RectMakeCenter(CAMERASTARTX - 25, CAMERASTARTY+ CAMERAY / 2, 40, 100);
+	_ctrlCameraRect[CTRL_RIGHT] = RectMakeCenter(CAMERASTARTX+CAMERAX + 25, CAMERASTARTY+CAMERAY / 2, 40, 100);
 
 	setup();
 	return S_OK;
@@ -57,7 +62,10 @@ void mapTool::render(void)
 	//}
 	
 	//_image->render(CAMERAMANAGER->getMemDC(), 0, 0);
-
+	for (int i = 0; i < 4; ++i)
+	{
+		Rectangle(getMemDC(), _ctrlCameraRect[i].left, _ctrlCameraRect[i].top, _ctrlCameraRect[i].right, _ctrlCameraRect[i].bottom);
+	}
 
 	//타일 갯수만치 배경
 	for (int i = 0; i < _vTile.size(); ++i)
@@ -76,6 +84,13 @@ void mapTool::render(void)
 			_vTile[i].rc.left, _vTile[i].rc.top,
 			_vTile[i].objFrameX, _vTile[i].objFrameY);
 	}
+
+	for (int i = 0; i < _vSampleTile.size(); ++i)
+	{
+		Rectangle(getMemDC(), _vSampleTile[i].rcTile.left, _vSampleTile[i].rcTile.top, _vSampleTile[i].rcTile.right, _vSampleTile[i].rcTile.bottom);
+		_image->frameMagRender(getMemDC(), _vSampleTile[i].rcTile.left, _vSampleTile[i].rcTile.top, _vSampleTile[i].terrainFrameX, _vSampleTile[i].terrainFrameY,4);
+	}
+
 
 	CAMERAMANAGER->render(getMemDC());
 
@@ -272,12 +287,15 @@ LRESULT mapTool::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam
 				_currentCtrl = CTRL_TERRAINDRAW;
 				_image = IMAGEMANAGER->findImage("backGround");
 				this->setSampleTile();
+				InvalidateRect(hWnd, NULL, false);
 
 			case CTRL_OBJDRAW :
 				this->setCtrlSelect(LOWORD(wParam));
 				_currentCtrl = CTRL_OBJDRAW;
 				_image = IMAGEMANAGER->findImage("object");
 				this->setSampleTile();
+				InvalidateRect(hWnd, NULL, false);
+
 			default:
 				this->setCtrlSelect(LOWORD(wParam));	
 				break;
@@ -305,23 +323,51 @@ LRESULT mapTool::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam
 
 void mapTool::setSampleTile()
 {
-	int sampleTileX = _image->getMaxFrameX();
-	int sampleTileY = _image->getMaxFrameY();
+	//int sampleTileX = _image->getMaxFrameX();
+	//int sampleTileY = _image->getMaxFrameY();
+
+	//for (int i = 0; i < sampleTileY; ++i)
+	//{
+	//	for (int j = 0; j < sampleTileX; ++j)
+	//	{
+	//		_sampleTile[i * sampleTileX + j].terrainFrameX = j;
+	//		_sampleTile[i * sampleTileX + j].terrainFrameY = i;
+
+	//		//렉트 셋팅 함수
+	//		SetRect(&_sampleTile[i * sampleTileX + j].rcTile,
+	//			(SAMPLETILESTARTX- _image->getWidth()) + j * TILESIZE,
+	//			SAMPLETILESTARTY+i * TILESIZE,
+	//			(SAMPLETILESTARTX - _image->getWidth()) + j * TILESIZE + TILESIZE,
+	//			SAMPLETILESTARTY+i * TILESIZE + TILESIZE);
+	//	}
+	//}
+
+	_vSampleTile.clear();
+
+	int sampleTileX = _image->getMaxFrameX()+1;
+	int sampleTileY = _image->getMaxFrameY()+1;
+
+	_vSampleTile.clear();
 
 	for (int i = 0; i < sampleTileY; ++i)
 	{
 		for (int j = 0; j < sampleTileX; ++j)
 		{
-			_sampleTile[i * sampleTileX + j].terrainFrameX = j;
-			_sampleTile[i * sampleTileX + j].terrainFrameY = i;
-
-			//렉트 셋팅 함수
-			SetRect(&_sampleTile[i * sampleTileX + j].rcTile,
-				(SAMPLETILESTARTX- _image->getWidth()) + j * TILESIZE,
-				SAMPLETILESTARTY+i * TILESIZE,
-				(SAMPLETILESTARTX - _image->getWidth()) + j * TILESIZE + TILESIZE,
-				SAMPLETILESTARTY+i * TILESIZE + TILESIZE);
+			tagSampleTile sampleTile;
+			sampleTile.terrainFrameX = j;
+			sampleTile.terrainFrameY = i;
+			_vSampleTile.push_back(sampleTile);
 		}
+	}
+
+	for (int i = 0; i < _vSampleTile.size(); ++i)
+	{
+		SetRect(&_vSampleTile[i].rcTile,
+			SAMPLETILESTARTX + 14 + (i % 4) * 70,
+			SAMPLETILESTARTY + 20 + ((int)(i / 4)) * 70,
+			SAMPLETILESTARTX + 14 + (i % 4) * 70 + 64,
+			SAMPLETILESTARTY + 20 + ((int)(i / 4)) * 70 + 64
+		);
 	}
 
 }

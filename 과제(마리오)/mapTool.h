@@ -29,6 +29,16 @@ enum ITEM
 	ITEM_ITEM,
 	ITEM_NONE
 };
+
+enum CTRLDIRECTION
+{
+	CTRL_UP,
+	CTRL_DOWN,
+	CTRL_LEFT,
+	CTRL_RIGHT,
+	CTRL_NONE
+};
+
 struct tagTile
 {
 	TERRAIN terrain;
@@ -59,6 +69,9 @@ private :
 	vector<tagTile> _vTile;
 	vector<tagTile>::iterator _viTile;
 
+	vector<tagSampleTile> _vSampleTile;
+	vector<tagSampleTile>::iterator _viSampleTile;
+
 private : 
 	HWND _btnSave;
 	HWND _btnLoad;
@@ -69,14 +82,13 @@ private :
 	HWND _btnDrag;
 
 	tagCurrentTile	_currentTile;
-	tagSampleTile	_sampleTile[66];	
 
 	image* _image;
 	int _pos[2];
 	bool _checkBox;
 	CTRL _currentCtrl;
 
-
+	RECT _ctrlCameraRect[4];
 	POINT _basePoint;
 	POINT _endPoint;
 

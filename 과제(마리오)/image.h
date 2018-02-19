@@ -110,6 +110,8 @@ public:
 	//애니메이션 렌더링 (뿌려줄 DC, 뿌려줄 위치 X, Y(left, top) 재생하고픈 애니메이션)
 	void aniRender(HDC hdc, int destX, int destY, animation* ani);
 
+	void frameMagRender(HDC hdc, int destX, int destY, int currentFrameX, int currentFrameY, int mag);
+
 
 	inline HDC getMemDC() { return _imageInfo->hMemDC; }
 

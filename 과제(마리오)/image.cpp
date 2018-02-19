@@ -626,3 +626,36 @@ void image::aniRender(HDC hdc, int destX, int destY, animation* ani)
 {
 	render(hdc, destX, destY, ani->getFramePos().x, ani->getFramePos().y, ani->getFrameWidth(), ani->getFrameHeight());
 }
+
+void image::frameMagRender(HDC hdc, int destX, int destY, int currentFrameX, int currentFrameY, int mag)
+{
+	_imageInfo->currentFrameX = currentFrameX;
+	_imageInfo->currentFrameY = currentFrameY;
+
+	if (_trans)
+	{
+		GdiTransparentBlt(
+			hdc,								//복사될 영역의 DC
+			destX,								//복사될 좌표 X
+			destY,								//복사될 좌표 Y
+			_imageInfo->frameWidth*mag,				//복사될 크기(가로)
+			_imageInfo->frameHeight*mag,			//복사될 크기(세로)
+			_imageInfo->hMemDC,					//복사해올 DC
+			currentFrameX * _imageInfo->frameWidth,
+			currentFrameY * _imageInfo->frameHeight,	//복사해올 좌표X,Y
+			_imageInfo->frameWidth,				//복사해올 크기
+			_imageInfo->frameHeight,			//복사해올 크기
+			_transColor);						//복사해올때 어떤 컬러를 빼고 가져올꺼냐
+	}
+	else
+	{
+		//백버퍼에 있는 것을 DC영역으로 고속복사해주는 함수
+		BitBlt(hdc, destX, destY,
+			_imageInfo->frameWidth,
+			_imageInfo->frameHeight,
+			_imageInfo->hMemDC,
+			currentFrameX * _imageInfo->frameWidth,
+			currentFrameY * _imageInfo->frameHeight,
+			SRCCOPY);
+	}
+}
