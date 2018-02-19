@@ -49,6 +49,7 @@ public:
 	inline HDC getMemDC() { return _cameraInfo->hMemDC; }
 	inline float getX() { return _cameraInfo->x; }
 	inline float getY() { return _cameraInfo->y; }
+	inline float getMg() { return _cameraInfo->magnification; }
 	inline void setMagnification(float mag) { _cameraInfo->magnification = mag; }
 
 

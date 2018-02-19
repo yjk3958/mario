@@ -12,6 +12,7 @@ HWND		_hWnd;			//핸들
 
 //포인트 구조체
 POINT _ptMouse;
+POINT _ptCameraMouse;
 
 LPTSTR _lpszClass = TEXT("Hepta Window API");
 

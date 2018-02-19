@@ -51,7 +51,7 @@ void cameraManager::release()
 void cameraManager::cameraMove(float focusX, float focusY)																   
 {
 	_cameraInfo->x = focusX - _cameraInfo->width / 2;
-	_cameraInfo->x = focusY - _cameraInfo->height / 2;
+	_cameraInfo->y = focusY - _cameraInfo->height / 2;
 
 	if (_cameraInfo->x < 0) _cameraInfo->x = 0;
 	if (_cameraInfo->x + _cameraInfo->width > _cameraInfo->groundWidth)

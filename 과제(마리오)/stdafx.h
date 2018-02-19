@@ -72,6 +72,7 @@ extern HINSTANCE	_hInstance;		//인스턴스 핸들
 extern HWND			_hWnd;			//핸들
 extern POINT		_ptMouse;
 extern BOOL			_leftButtonDown;
+extern POINT		_ptCameraMouse;
 
 //=======================================================
 //## 마리오 연습중 ## 2018.02.10 ##

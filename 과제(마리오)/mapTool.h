@@ -86,11 +86,16 @@ private :
 	image* _image;
 	int _pos[2];
 	int _page;
+
+	int _currentFrameX;
+	int _currentFrameY;
 	bool _checkBox;
 	CTRL _currentCtrl;
 
 	RECT _ctrlCameraRect[4];
 	RECT _ctrlPage[2];
+	RECT _cameraBox;
+	RECT _sampleBox;
 	POINT _basePoint;
 	POINT _endPoint;
 
