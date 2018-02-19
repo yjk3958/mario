@@ -28,12 +28,13 @@ HRESULT mapTool::init(void)
 	_image = IMAGEMANAGER->findImage("backGround");
 	setSampleTile();
 	_checkBox = false;
-
+	_page = 1;
 	_ctrlCameraRect[CTRL_UP] = RectMakeCenter(CAMERASTARTX+CAMERAX / 2, CAMERASTARTY - 25, 100, 40);
 	_ctrlCameraRect[CTRL_DOWN] = RectMakeCenter(CAMERASTARTX+CAMERAX / 2, CAMERASTARTY + CAMERAY + 25, 100, 40);
 	_ctrlCameraRect[CTRL_LEFT] = RectMakeCenter(CAMERASTARTX - 25, CAMERASTARTY+ CAMERAY / 2, 40, 100);
 	_ctrlCameraRect[CTRL_RIGHT] = RectMakeCenter(CAMERASTARTX+CAMERAX + 25, CAMERASTARTY+CAMERAY / 2, 40, 100);
-
+	_ctrlPage[0] = RectMakeCenter(SAMPLETILESTARTX + SAMPLETILEBOXX / 2 - 50, SAMPLETILESTARTY + SAMPLETILEBOXY - 20, 40, 15);
+	_ctrlPage[1] = RectMakeCenter(SAMPLETILESTARTX + SAMPLETILEBOXX / 2 + 50, SAMPLETILESTARTY + SAMPLETILEBOXY - 20, 40, 15);
 	setup();
 	return S_OK;
 }
@@ -44,6 +45,12 @@ void mapTool::release(void)
 void mapTool::update(void)		
 {
 	gameNode::update();
+
+	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+	{
+		
+	}
+
 }
 void mapTool::render(void)		
 {
@@ -52,7 +59,8 @@ void mapTool::render(void)
 
 	RectangleMake(getMemDC(), CAMERASTARTX, CAMERASTARTY, CAMERAX, CAMERAY);
 	RectangleMake(getMemDC(), SAMPLETILESTARTX, SAMPLETILESTARTY, SAMPLETILEBOXX, SAMPLETILEBOXY);
-
+	Rectangle(getMemDC(), _ctrlPage[0].left, _ctrlPage[0].top, _ctrlPage[0].right, _ctrlPage[0].bottom);
+	Rectangle(getMemDC(), _ctrlPage[1].left, _ctrlPage[1].top, _ctrlPage[1].right, _ctrlPage[1].bottom);
 	//for (int i = 0; i < _image->getMaxFrameX(); ++i)
 	//{
 	//	for (int j = 0; j < _image->getMaxFrameY(); ++j)
@@ -87,8 +95,39 @@ void mapTool::render(void)
 
 	for (int i = 0; i < _vSampleTile.size(); ++i)
 	{
-		Rectangle(getMemDC(), _vSampleTile[i].rcTile.left, _vSampleTile[i].rcTile.top, _vSampleTile[i].rcTile.right, _vSampleTile[i].rcTile.bottom);
-		_image->frameMagRender(getMemDC(), _vSampleTile[i].rcTile.left, _vSampleTile[i].rcTile.top, _vSampleTile[i].terrainFrameX, _vSampleTile[i].terrainFrameY,4);
+		if (_vSampleTile.size() > 20)
+		{
+			if (_page == 1&& i >= 20) continue;
+			else
+			{
+				Rectangle(getMemDC(), _vSampleTile[i].rcTile.left, _vSampleTile[i].rcTile.top, _vSampleTile[i].rcTile.right, _vSampleTile[i].rcTile.bottom);
+				_image->frameMagRender(getMemDC(), _vSampleTile[i].rcTile.left, _vSampleTile[i].rcTile.top, _vSampleTile[i].terrainFrameX, _vSampleTile[i].terrainFrameY, 4);
+			}
+			
+			if (_page == 2 && (i >= 40 || i < 20)) continue;
+			else
+			{
+				Rectangle(getMemDC(), _vSampleTile[i].rcTile.left, _vSampleTile[i].rcTile.top, _vSampleTile[i].rcTile.right, _vSampleTile[i].rcTile.bottom);
+				_image->frameMagRender(getMemDC(), _vSampleTile[i].rcTile.left, _vSampleTile[i].rcTile.top, _vSampleTile[i].terrainFrameX, _vSampleTile[i].terrainFrameY, 4);
+			}
+			if (_page == 3 && (i < 40 || i >= 60)) continue;
+			else
+			{
+				Rectangle(getMemDC(), _vSampleTile[i].rcTile.left, _vSampleTile[i].rcTile.top, _vSampleTile[i].rcTile.right, _vSampleTile[i].rcTile.bottom);
+				_image->frameMagRender(getMemDC(), _vSampleTile[i].rcTile.left, _vSampleTile[i].rcTile.top, _vSampleTile[i].terrainFrameX, _vSampleTile[i].terrainFrameY, 4);
+			}
+			if (_page == 4 && (i < 60 || i >= 80)) continue;
+			else
+			{
+				Rectangle(getMemDC(), _vSampleTile[i].rcTile.left, _vSampleTile[i].rcTile.top, _vSampleTile[i].rcTile.right, _vSampleTile[i].rcTile.bottom);
+				_image->frameMagRender(getMemDC(), _vSampleTile[i].rcTile.left, _vSampleTile[i].rcTile.top, _vSampleTile[i].terrainFrameX, _vSampleTile[i].terrainFrameY, 4);
+			}
+		}
+		else
+		{
+			Rectangle(getMemDC(), _vSampleTile[i].rcTile.left, _vSampleTile[i].rcTile.top, _vSampleTile[i].rcTile.right, _vSampleTile[i].rcTile.bottom);
+			_image->frameMagRender(getMemDC(), _vSampleTile[i].rcTile.left, _vSampleTile[i].rcTile.top, _vSampleTile[i].terrainFrameX, _vSampleTile[i].terrainFrameY, 4);
+		}
 	}
 
 
@@ -251,6 +290,21 @@ LRESULT mapTool::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam
 			{
 				_basePoint = _endPoint = _ptMouse;
 			}
+			if (PtInRect(&_ctrlPage[0], _ptMouse))
+			{
+				_page--;
+				if (_page < 1) _page = 1;
+				InvalidateRect(hWnd, NULL, false);
+				break;
+			}
+			if (PtInRect(&_ctrlPage[1], _ptMouse))
+			{
+				_page++;
+				if (_page > 4)_page = 4;
+				InvalidateRect(hWnd, NULL, false);
+				break;
+			}
+			InvalidateRect(hWnd, NULL, false);
 			break;
 		case WM_LBUTTONUP:
 			_leftButtonDown = false;
@@ -282,20 +336,21 @@ LRESULT mapTool::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam
 			case CTRL_BOXMAKE:
 				if(!_checkBox)_checkBox = true;
 				if (_checkBox)_checkBox = false;
+				break;
 			case CTRL_TERRAINDRAW :
 				this ->setCtrlSelect(LOWORD(wParam));
 				_currentCtrl = CTRL_TERRAINDRAW;
 				_image = IMAGEMANAGER->findImage("backGround");
 				this->setSampleTile();
 				InvalidateRect(hWnd, NULL, false);
-
+				break;
 			case CTRL_OBJDRAW :
 				this->setCtrlSelect(LOWORD(wParam));
 				_currentCtrl = CTRL_OBJDRAW;
 				_image = IMAGEMANAGER->findImage("object");
 				this->setSampleTile();
 				InvalidateRect(hWnd, NULL, false);
-
+				break;
 			default:
 				this->setCtrlSelect(LOWORD(wParam));	
 				break;
@@ -347,7 +402,6 @@ void mapTool::setSampleTile()
 	int sampleTileX = _image->getMaxFrameX()+1;
 	int sampleTileY = _image->getMaxFrameY()+1;
 
-	_vSampleTile.clear();
 
 	for (int i = 0; i < sampleTileY; ++i)
 	{
@@ -362,11 +416,16 @@ void mapTool::setSampleTile()
 
 	for (int i = 0; i < _vSampleTile.size(); ++i)
 	{
+		int j = 0;
+		if (i <20) j = i;
+		if ((i < 40 && i >= 20)) j = i - 20;
+		if ((i < 60 && i >= 40)) j = i - 40;
+		if ((i < 80 && i >= 60)) j = i - 60;
 		SetRect(&_vSampleTile[i].rcTile,
-			SAMPLETILESTARTX + 14 + (i % 4) * 70,
-			SAMPLETILESTARTY + 20 + ((int)(i / 4)) * 70,
-			SAMPLETILESTARTX + 14 + (i % 4) * 70 + 64,
-			SAMPLETILESTARTY + 20 + ((int)(i / 4)) * 70 + 64
+			SAMPLETILESTARTX + 14 + (j % 4) * 70,
+			SAMPLETILESTARTY + 20 + ((int)(j / 4)) * 70,
+			SAMPLETILESTARTX + 14 + (j % 4) * 70 + 64,
+			SAMPLETILESTARTY + 20 + ((int)(j / 4)) * 70 + 64
 		);
 	}
 
