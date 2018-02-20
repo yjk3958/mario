@@ -22,6 +22,10 @@ public:
 		float	mdX;
 		float	mdY;
 
+		bool	topEnd;
+		bool	bottomEnd;
+		bool	leftEnd;
+		bool	rightEnd;
 
 		float	magnification;	//배율
 	//초기화까지 동시에 한다
@@ -39,6 +43,10 @@ public:
 			magnification = 1;
 			mdX = 0;
 			mdY = 0;
+			topEnd = false;
+			bottomEnd = false;
+			leftEnd = false;
+			rightEnd = false;
 		}
 	}CAMERA_INFO, *LPCAMERA_INFO;
 private :
@@ -61,6 +69,9 @@ public:
 	inline float getMdY() { return _cameraInfo->mdY; }
 	inline void setMagnification(float mag) { _cameraInfo->magnification = mag; }
 
-
+	inline bool getLeftEnd() { return _cameraInfo->leftEnd; }
+	inline bool getRightEnd() { return _cameraInfo->rightEnd; }
+	inline bool getTopEnd() { return _cameraInfo->topEnd; }
+	inline bool getBottomEnd() { return _cameraInfo->bottomEnd; }
 };
 

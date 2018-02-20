@@ -132,24 +132,6 @@ LRESULT gameNode::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lPara
 			if (_leftButtonDown) this->setMap();
 		}
 		break;
-		case WM_COMMAND:
-			switch (LOWORD(wParam))
-			{
-			case CTRL_SAVE:
-				this->save();
-				break;
-
-			case CTRL_LOAD:
-				this->load();
-				InvalidateRect(hWnd, NULL, false);
-				break;
-
-			default:
-				this->setCtrlSelect(LOWORD(wParam));
-				break;
-			}
-			break;
-
 
 		case WM_KEYDOWN:
 			switch (wParam)

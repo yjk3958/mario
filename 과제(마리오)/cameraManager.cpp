@@ -54,6 +54,11 @@ void cameraManager::release()
 }
 void cameraManager::cameraMove(float focusX, float focusY)																   
 {
+	_cameraInfo->topEnd = false;
+	_cameraInfo->bottomEnd = false;
+	_cameraInfo->leftEnd = false;
+	_cameraInfo->rightEnd = false;
+
 	_cameraInfo->x = focusX - _cameraInfo->width / 2;
 	_cameraInfo->y = focusY - _cameraInfo->height / 2;
 
@@ -63,6 +68,12 @@ void cameraManager::cameraMove(float focusX, float focusY)
 	if (_cameraInfo->y < 0) _cameraInfo->y = 0;
 	if (_cameraInfo->y + _cameraInfo->height > _cameraInfo->groundHeight)
 		_cameraInfo->y = _cameraInfo->groundHeight - _cameraInfo->height;
+	
+	if (_cameraInfo->x == 0) _cameraInfo->leftEnd = true;
+	if (_cameraInfo->x == _cameraInfo->groundWidth - _cameraInfo->width) _cameraInfo->rightEnd = true;
+	if (_cameraInfo->y == 0) _cameraInfo->topEnd = true;
+	if (_cameraInfo->y == _cameraInfo->groundHeight - _cameraInfo->height) _cameraInfo->bottomEnd = true;
+	
 	_cameraInfo->mdX = _cameraInfo->x + _cameraInfo->width / 2;
 	_cameraInfo->mdY = _cameraInfo->y + _cameraInfo->height / 2;
 }

@@ -72,6 +72,8 @@ private :
 	vector<tagSampleTile> _vSampleTile;
 	vector<tagSampleTile>::iterator _viSampleTile;
 
+	vector<tagTile> _vDummyTile;
+	vector<tagTile>::iterator _viDummyTile;
 private : 
 	HWND _btnSave;
 	HWND _btnLoad;
@@ -80,6 +82,7 @@ private :
 	HWND _btnItemDraw;
 	HWND _btnEraser;
 	HWND _btnDrag;
+	HWND _btnMakeTile;
 
 	tagCurrentTile	_currentTile;
 
@@ -89,7 +92,12 @@ private :
 
 	int _currentFrameX;
 	int _currentFrameY;
+
+	int _currentLineX;
+	int _currentLineY;
+
 	bool _checkBox;
+	bool _tileMake;
 	CTRL _currentCtrl;
 
 	RECT _ctrlCameraRect[4];

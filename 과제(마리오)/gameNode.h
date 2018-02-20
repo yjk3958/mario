@@ -10,6 +10,7 @@ enum CTRL
 	CTRL_OBJDRAW,		//오브젝트	버튼 메시지
 	CTRL_ERASER,		//지우개		버튼 메시지
 	CTRL_BOXMAKE,		//드래그박스
+	CTRL_TILEMAKE,
 	CTRL_END
 };
 

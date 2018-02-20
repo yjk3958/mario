@@ -31,6 +31,10 @@ HRESULT mapTool::init(void)
 	_cameraBox = RectMake(CAMERASTARTX, CAMERASTARTY, CAMERAX, CAMERAY);
 	_sampleBox = RectMake(SAMPLETILESTARTX, SAMPLETILESTARTY, SAMPLETILEBOXX, SAMPLETILEBOXY);
 	_page = 1;
+
+	_currentLineX = TILEBASEX;
+	_currentLineY = TILEBASEY;
+
 	_ctrlCameraRect[CTRL_UP] = RectMakeCenter(CAMERASTARTX+CAMERAX / 2, CAMERASTARTY - 25, 100, 40);
 	_ctrlCameraRect[CTRL_DOWN] = RectMakeCenter(CAMERASTARTX+CAMERAX / 2, CAMERASTARTY + CAMERAY + 25, 100, 40);
 	_ctrlCameraRect[CTRL_LEFT] = RectMakeCenter(CAMERASTARTX - 25, CAMERASTARTY+ CAMERAY / 2, 40, 100);
@@ -99,25 +103,7 @@ void mapTool::render(void)
 			_vTile[i].rc.left, _vTile[i].rc.top,
 			_vTile[i].objFrameX, _vTile[i].objFrameY);
 	}
-	TCHAR text[128];
-	wsprintf(text, "카메라 마우스 좌표 : %d , %d", _ptCameraMouse.x, _ptCameraMouse.y);
-	TextOut(getMemDC(), 10, 10, text, strlen(text));
 
-	TCHAR dr[128];
-	sprintf(dr, "카메라 매니저 시작점 좌표 : %f, %f", CAMERAMANAGER->getX(), CAMERAMANAGER->getY());
-	TextOut(getMemDC(), 10, 30, dr, strlen(dr));
-
-	TCHAR cr[128];
-	wsprintf(cr, "샘플타일 종류 좌표 : %d , %d", _currentFrameX, _currentFrameY);
-	TextOut(getMemDC(), 10, 50, cr, strlen(cr));
-
-	/*TCHAR tr[128];
-	wsprintf(tr, "카메라 마우스 좌표 : %d , %d", _vTile[0].terrainFrameX, _vTile[0].terrainFrameY);
-	TextOut(getMemDC(), 10,70, tr, strlen(tr));
-*/
-	TCHAR t[128];
-	wsprintf(t, "%d", _currentCtrl);
-	TextOut(getMemDC(), 10, 90, t, strlen(t));
 
 
 	//타일 갯수만치 오브젝트
@@ -148,7 +134,25 @@ void mapTool::render(void)
 
 
 	CAMERAMANAGER->render(getMemDC());
+	TCHAR text[128];
+	wsprintf(text, "카메라 마우스 좌표 : %d , %d", _ptCameraMouse.x, _ptCameraMouse.y);
+	TextOut(getMemDC(), 10, 10, text, strlen(text));
 
+	TCHAR dr[128];
+	sprintf(dr, "카메라 매니저 시작점 좌표 : %f, %f", CAMERAMANAGER->getX(), CAMERAMANAGER->getY());
+	TextOut(getMemDC(), 10, 30, dr, strlen(dr));
+
+	TCHAR cr[128];
+	wsprintf(cr, "샘플타일 종류 좌표 : %d , %d", _currentFrameX, _currentFrameY);
+	TextOut(getMemDC(), 10, 50, cr, strlen(cr));
+
+	TCHAR tr[128];
+	wsprintf(tr, "사이즈  %d", _vTile.size());
+	TextOut(getMemDC(), 10, 70, tr, strlen(tr));
+
+	TCHAR t[128];
+	wsprintf(t, "%d", _currentCtrl);
+	TextOut(getMemDC(), 10, 90, t, strlen(t));
 	//==================================================
 	this->getBackBuffer()->render(getHDC(), 0, 0);
 }
@@ -167,6 +171,8 @@ void mapTool::setup()
 	_btnEraser = CreateWindow("button", "지우개", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 1100, 560, 100, 30, _hWnd, HMENU(4), _hInstance, NULL);
 
 	_btnDrag = CreateWindow("button", "범위지정", WS_CHILD | WS_VISIBLE | BS_CHECKBOX, 900, 620, 100, 30, _hWnd, HMENU(5), _hInstance, NULL);
+
+	_btnMakeTile = CreateWindow("button", "MakeTile", WS_CHILD | WS_VISIBLE | BS_CHECKBOX, 1000, 620, 100, 30, _hWnd, HMENU(6), _hInstance, NULL);
 
 	_ctrSelect = CTRL_TERRAINDRAW;
 
@@ -273,7 +279,7 @@ void mapTool::save()
 		CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
 
-	WriteFile(file, saveTile, sizeof(tagTile)*i, &write, NULL);
+	WriteFile(file, &saveTile, sizeof(tagTile)*i, &write, NULL);
 	 
 	CloseHandle(file);
 }
@@ -284,13 +290,13 @@ void mapTool::load()
 
 	const int i = _vTile.size();
 
-	tagTile* saveTile = new tagTile[i];
+	tagTile saveTile;
 
 	file = CreateFile("saveMap.map", GENERIC_READ, NULL, NULL,
 		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
 
-	ReadFile(file, saveTile, sizeof(tagTile)*i, &read, NULL);
+	ReadFile(file, &saveTile, sizeof(tagTile) * i, &read, NULL);
 
 	CloseHandle(file);
 }
@@ -435,6 +441,13 @@ LRESULT mapTool::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam
 				this->setSampleTile();
 				InvalidateRect(hWnd, NULL, false);
 				break;
+			case CTRL_TILEMAKE :
+				this->setCtrlSelect(LOWORD(wParam));
+				if (_tileMake) _tileMake = false;
+				else _tileMake = true;
+				InvalidateRect(hWnd, NULL, false);
+				break;
+
 			default:
 				this->setCtrlSelect(LOWORD(wParam));	
 				break;
@@ -530,15 +543,19 @@ void mapTool::setCameraMove(CTRLDIRECTION dir)
 	{
 	case CTRL_UP:
 			CAMERAMANAGER->cameraMove(CAMERAMANAGER->getMdX(), CAMERAMANAGER->getMdY() - TILESIZE);
+			if (_tileMake) createExtraMap();
 		break;
 	case CTRL_DOWN:
 		CAMERAMANAGER->cameraMove(CAMERAMANAGER->getMdX(), CAMERAMANAGER->getMdY() + TILESIZE);
+		if (_tileMake) createExtraMap();
 		break;
 	case CTRL_LEFT:
 		CAMERAMANAGER->cameraMove(CAMERAMANAGER->getMdX() - TILESIZE, CAMERAMANAGER->getMdY());
+		if (_tileMake) createExtraMap();
 		break;
 	case CTRL_RIGHT:
 		CAMERAMANAGER->cameraMove(CAMERAMANAGER->getMdX() + TILESIZE, CAMERAMANAGER->getMdY());
+		if (_tileMake) createExtraMap();
 		break;
 	case CTRL_NONE:
 		break;
@@ -547,5 +564,102 @@ void mapTool::setCameraMove(CTRLDIRECTION dir)
 
 void mapTool::createExtraMap()
 {
+	int vNum = 0;
+	_vDummyTile.clear();
 
+	if (CAMERAMANAGER->getTopEnd()&& 
+		(PtInRect(&_ctrlCameraRect[CTRL_UP],_ptMouse)
+	|| PtInRect(&_ctrlCameraRect[CTRL_DOWN], _ptMouse)))
+	{
+		for (int i = 0; i < _vTile.size(); ++i)
+		{
+			tagTile dummyTile;
+			dummyTile.item = _vTile[i].item;
+			dummyTile.obj = _vTile[i].obj;
+			dummyTile.objFrameX = _vTile[i].objFrameX;
+			dummyTile.objFrameY = _vTile[i].objFrameY;
+			dummyTile.rc = _vTile[i].rc;
+			dummyTile.terrain = _vTile[i].terrain;
+			dummyTile.terrainFrameX = _vTile[i].terrainFrameX;
+			dummyTile.terrainFrameY = _vTile[i].terrainFrameY;
+			_vDummyTile.push_back(dummyTile);
+		}
+
+		for (int i = 0; i < _currentLineX; ++i)
+		{
+			tagTile tile;
+			_vTile.push_back(tile);
+		}
+
+		_currentLineY++;
+	}
+
+	if (CAMERAMANAGER->getTopEnd() &&
+		(PtInRect(&_ctrlCameraRect[CTRL_LEFT], _ptMouse)
+			|| PtInRect(&_ctrlCameraRect[CTRL_RIGHT], _ptMouse)))
+	{
+		for (int i = 0; i < _vTile.size(); ++i)
+		{
+			tagTile dummyTile;
+			dummyTile.item = _vTile[i].item;
+			dummyTile.obj = _vTile[i].obj;
+			dummyTile.objFrameX = _vTile[i].objFrameX;
+			dummyTile.objFrameY = _vTile[i].objFrameY;
+			dummyTile.rc = _vTile[i].rc;
+			dummyTile.terrain = _vTile[i].terrain;
+			dummyTile.terrainFrameX = _vTile[i].terrainFrameX;
+			dummyTile.terrainFrameY = _vTile[i].terrainFrameY;
+			_vDummyTile.push_back(dummyTile);
+		}
+
+		for (int i = 0; i < _currentLineY; ++i)
+		{
+			tagTile tile;
+			_vTile.push_back(tile);
+		}
+
+		_currentLineX++;
+	}
+
+	for (int i = 0; i < _currentLineY; ++i)
+	{
+		for (int j = 0; j < _currentLineX; ++j)
+		{
+			SetRect(&_vTile[vNum].rc,
+				j * TILESIZE,
+				i * TILESIZE,
+				j * TILESIZE + TILESIZE,
+				i * TILESIZE + TILESIZE);
+			vNum++;
+		}
+	}
+
+	for (int i = 0; i < _vTile.size(); ++i)
+	{
+		for (int j = 0; j < _vDummyTile.size(); ++j)
+		{
+			if (_vDummyTile[j].rc.left == _vTile[i].rc.left
+				&& _vDummyTile[j].rc.top == _vTile[i].rc.top)
+			{
+				_vTile[i].item = _vDummyTile[j].item;
+				_vTile[i].obj = _vDummyTile[j].obj;
+				_vTile[i].objFrameX = _vDummyTile[j].objFrameX;
+				_vTile[i].objFrameY = _vDummyTile[j].objFrameY;
+				_vTile[i].terrain = _vDummyTile[j].terrain;
+				_vTile[i].terrainFrameX = _vDummyTile[j].terrainFrameX;
+				_vTile[i].terrainFrameY = _vDummyTile[j].terrainFrameY;
+				break;
+			}
+			else
+			{
+				_vTile[i].item = ITEM_NONE;
+				_vTile[i].obj = OBJ_NONE;
+				_vTile[i].objFrameX = 0;
+				_vTile[i].objFrameY = 0;
+				_vTile[i].terrain = TR_NONE;
+				_vTile[i].terrainFrameX = 0;
+				_vTile[i].terrainFrameY = 0;
+			}
+		}
+	}
 }
