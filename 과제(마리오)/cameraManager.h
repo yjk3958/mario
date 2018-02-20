@@ -19,6 +19,10 @@ public:
 		int		groundWidth;	//배경 총 가로크기
 		int		groundHeight;	//배경 총 세로크기
 		
+		float	mdX;
+		float	mdY;
+
+
 		float	magnification;	//배율
 	//초기화까지 동시에 한다
 		tagCameraInfo()
@@ -33,6 +37,8 @@ public:
 			groundWidth = 0;
 			groundHeight = 0;
 			magnification = 1;
+			mdX = 0;
+			mdY = 0;
 		}
 	}CAMERA_INFO, *LPCAMERA_INFO;
 private :
@@ -48,8 +54,11 @@ public:
 
 	inline HDC getMemDC() { return _cameraInfo->hMemDC; }
 	inline float getX() { return _cameraInfo->x; }
-	inline float getY() { return _cameraInfo->y; }
+	inline float getY() {
+		return _cameraInfo->y; }
 	inline float getMg() { return _cameraInfo->magnification; }
+	inline float getMdX() { return _cameraInfo->mdX; }
+	inline float getMdY() { return _cameraInfo->mdY; }
 	inline void setMagnification(float mag) { _cameraInfo->magnification = mag; }
 
 

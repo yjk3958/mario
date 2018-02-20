@@ -90,28 +90,7 @@ void mapTool::render(void)
 		//TextOut(getMemDC(), 10, 20, md, strlen(md));
 		//}
 	}
-	TCHAR text[128];
-	wsprintf(text, "%d , %d", _ptCameraMouse.x, _ptCameraMouse.y);
-	TextOut(getMemDC(), 10, 10, text, strlen(text));
 
-	TCHAR dr[128];
-	wsprintf(dr, "%d , %d", CAMERAMANAGER->getX(), CAMERAMANAGER->getY());
-	TextOut(getMemDC(), 10, 30, dr, strlen(dr));
-
-	TCHAR cr[128];
-	wsprintf(cr, "%d , %d", _currentFrameX, _currentFrameY);
-	TextOut(getMemDC(), 10, 50, cr, strlen(cr));
-
-	TCHAR tr[128];
-	wsprintf(tr, "%d , %d", _vTile[0].terrainFrameX, _vTile[0].terrainFrameY);
-	TextOut(getMemDC(), 10,70, tr, strlen(tr));
-
-	TCHAR t[128];
-	wsprintf(t, "%d", _currentCtrl);
-	TextOut(getMemDC(), 10, 90, t, strlen(t));
-
-
-	//타일 갯수만치 오브젝트
 	for (int i = 0; i < _vTile.size(); ++i)
 	{
 		if (_vTile[i].obj == OBJ_NONE) continue;
@@ -120,6 +99,29 @@ void mapTool::render(void)
 			_vTile[i].rc.left, _vTile[i].rc.top,
 			_vTile[i].objFrameX, _vTile[i].objFrameY);
 	}
+	TCHAR text[128];
+	wsprintf(text, "카메라 마우스 좌표 : %d , %d", _ptCameraMouse.x, _ptCameraMouse.y);
+	TextOut(getMemDC(), 10, 10, text, strlen(text));
+
+	TCHAR dr[128];
+	sprintf(dr, "카메라 매니저 시작점 좌표 : %f, %f", CAMERAMANAGER->getX(), CAMERAMANAGER->getY());
+	TextOut(getMemDC(), 10, 30, dr, strlen(dr));
+
+	TCHAR cr[128];
+	wsprintf(cr, "샘플타일 종류 좌표 : %d , %d", _currentFrameX, _currentFrameY);
+	TextOut(getMemDC(), 10, 50, cr, strlen(cr));
+
+	/*TCHAR tr[128];
+	wsprintf(tr, "카메라 마우스 좌표 : %d , %d", _vTile[0].terrainFrameX, _vTile[0].terrainFrameY);
+	TextOut(getMemDC(), 10,70, tr, strlen(tr));
+*/
+	TCHAR t[128];
+	wsprintf(t, "%d", _currentCtrl);
+	TextOut(getMemDC(), 10, 90, t, strlen(t));
+
+
+	//타일 갯수만치 오브젝트
+
 
 	for (int i = 0; i < _vSampleTile.size(); ++i)
 	{
@@ -239,6 +241,7 @@ void mapTool::setMap()
 			{
 				if (_currentCtrl == CTRL_OBJDRAW)
 				{
+					_vTile[i].obj = OBJ_BLOCK;
 					_vTile[i].objFrameX = _currentFrameX;
 					_vTile[i].objFrameY = _currentFrameY;
 				}
@@ -325,6 +328,19 @@ LRESULT mapTool::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam
 			break;
 		case WM_LBUTTONDOWN:
 			_leftButtonDown = true;
+
+			for (int i = 0; i < CTRL_NONE; ++i)
+			{
+				if (PtInRect(&_ctrlCameraRect[i], _ptMouse))
+				{
+					setCameraMove((CTRLDIRECTION)i);
+					InvalidateRect(hWnd, NULL, false);
+					break;
+				}
+				else setCameraMove(CTRL_NONE);
+			
+			}
+
 			if(!_checkBox)this->setMap();
 			if (_checkBox)
 			{
@@ -363,9 +379,10 @@ LRESULT mapTool::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam
 			_leftButtonDown = false;
 			if (_checkBox)
 			{
-				this->setMap();
+				if(PtInRect(&_cameraBox,_ptMouse)) this->setMap();
 				_checkBox = false;
 			}
+			setCameraMove(CTRL_NONE);
 			break;
 		case WM_MOUSEMOVE:
 		{
@@ -376,6 +393,12 @@ LRESULT mapTool::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam
 				_ptCameraMouse.x = CAMERAMANAGER->getX() + (_ptMouse.x - CAMERASTARTX)/CAMERAMANAGER->getMg();
 				_ptCameraMouse.y = CAMERAMANAGER->getY() + (_ptMouse.y - CAMERASTARTY) / CAMERAMANAGER->getMg();
 			}
+			else
+			{
+				_ptCameraMouse.x = _ptMouse.x;
+				_ptCameraMouse.y = _ptMouse.y;
+			}
+
 			if (_leftButtonDown&&!_checkBox) this->setMap();
 			if (_leftButtonDown&&_checkBox) _endPoint = _ptCameraMouse;
 			InvalidateRect(hWnd, NULL, false);
@@ -489,5 +512,40 @@ void mapTool::setSampleTile()
 			SAMPLETILESTARTY + 20 + ((int)(j / 4)) * 70 + 64
 		);
 	}
+
+}
+
+void mapTool::setObjNum()
+{
+	for (int i = 0; i < _vTile.size(); ++i)
+	{
+		if (_vTile[i].objFrameX == 0 && _vTile[i].objFrameY == 0) _vTile[i].obj = OBJ_BLOCK;
+		if (_vTile[i].objFrameX == 0 && _vTile[i].objFrameY == 0) _vTile[i].obj = OBJ_ITEMBOX;
+	}
+}
+
+void mapTool::setCameraMove(CTRLDIRECTION dir)
+{
+	switch (dir)
+	{
+	case CTRL_UP:
+			CAMERAMANAGER->cameraMove(CAMERAMANAGER->getMdX(), CAMERAMANAGER->getMdY() - TILESIZE);
+		break;
+	case CTRL_DOWN:
+		CAMERAMANAGER->cameraMove(CAMERAMANAGER->getMdX(), CAMERAMANAGER->getMdY() + TILESIZE);
+		break;
+	case CTRL_LEFT:
+		CAMERAMANAGER->cameraMove(CAMERAMANAGER->getMdX() - TILESIZE, CAMERAMANAGER->getMdY());
+		break;
+	case CTRL_RIGHT:
+		CAMERAMANAGER->cameraMove(CAMERAMANAGER->getMdX() + TILESIZE, CAMERAMANAGER->getMdY());
+		break;
+	case CTRL_NONE:
+		break;
+	}
+}
+
+void mapTool::createExtraMap()
+{
 
 }

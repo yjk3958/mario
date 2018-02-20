@@ -99,7 +99,6 @@ private :
 	POINT _basePoint;
 	POINT _endPoint;
 
-
 public:
 	mapTool();
 	~mapTool();
@@ -113,6 +112,11 @@ public:
 	virtual void setup();
 	virtual void setMap();
 	virtual void setSampleTile();
+	virtual void setObjNum();
+	virtual void createExtraMap();
+
+
+	virtual void setCameraMove(CTRLDIRECTION dir);
 
 
 	//저장, 불러오기

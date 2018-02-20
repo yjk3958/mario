@@ -26,7 +26,11 @@ HRESULT cameraManager::init(int groundTotalWidth, int groundTotalHeight, int cam
 	_cameraInfo->groundWidth = groundTotalWidth;
 	_cameraInfo->groundHeight = groundTotalHeight;
 	_cameraInfo->magnification = magnification;
-	
+
+	_cameraInfo->mdX = _cameraInfo->x + _cameraInfo->width / 2;
+	_cameraInfo->mdY = _cameraInfo->y + _cameraInfo->height / 2;
+
+
 	if (_cameraInfo->hBit == NULL)
 	{
 		release();
@@ -59,6 +63,8 @@ void cameraManager::cameraMove(float focusX, float focusY)
 	if (_cameraInfo->y < 0) _cameraInfo->y = 0;
 	if (_cameraInfo->y + _cameraInfo->height > _cameraInfo->groundHeight)
 		_cameraInfo->y = _cameraInfo->groundHeight - _cameraInfo->height;
+	_cameraInfo->mdX = _cameraInfo->x + _cameraInfo->width / 2;
+	_cameraInfo->mdY = _cameraInfo->y + _cameraInfo->height / 2;
 }
 void cameraManager::render(HDC hdc)																						   
 {
